@@ -8,7 +8,9 @@ $("#add").on("click", () => {
     });
 });
 $("#delete").on("click", () => {
+    console.log(Number($("#idtodel").val()));
     books.splice(Number($("#idtodel").val()), 1);
+    console.log(books);
 });
 $("#read").on("click", () => {
     for (book of books) {
@@ -28,7 +30,7 @@ $("#modify").on("click", () => {
 });
 $("#searchbyname").on("click", () => {
     for (book of books) {
-        if (book.title == $("#title").val()) {
+        if (book.title == $("#titlee").val()) {
             $("body").append(
                 $(
                     `<div class='result'><h1>${book.title}</h1><p>${book.author}<br>${book.year}</p></div>`
@@ -39,7 +41,7 @@ $("#searchbyname").on("click", () => {
 });
 $("#searchbyauthor").on("click", () => {
     for (book of books) {
-        if (book.author == $("#author").val()) {
+        if (book.author == $("#authorr").val()) {
             $("body").append(
                 $(
                     `<div class='result'><h1>${book.title}</h1><p>${book.author}<br>${book.year}</p></div>`
@@ -50,7 +52,7 @@ $("#searchbyauthor").on("click", () => {
 });
 $("#searchbyyear").on("click", () => {
     for (book of books) {
-        if (book.year == Number($("#year").val())) {
+        if (book.year == Number($("#yearr").val())) {
             $("body").append(
                 $(
                     `<div class='result'><h1>${book.title}</h1><p>${book.author}<br>${book.year}</p></div>`
@@ -63,9 +65,9 @@ $("#searchbyid").on("click", () => {
     $("body").append(
         $(
             `<div class='result'><h1>${
-                books[Number($("#id").val())].title
-            }</h1><p>${books[Number($("#id").val())].author}<br>${
-                books[Number($("#id").val())].year
+                books[Number($("#idd").val())].title
+            }</h1><p>${books[Number($("#idd").val())].author}<br>${
+                books[Number($("#idd").val())].year
             }</p></div>`
         )
     );
