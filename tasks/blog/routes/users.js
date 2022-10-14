@@ -10,7 +10,7 @@ class Blog {
   }
 
   async getAllUsers(req, res) {
-    UsersContoller.allUsers(req, res)
+    UsersController.allUsers(req, res)
   }
 }
 
