@@ -1,36 +1,20 @@
+const User = require("../models/user")
+
 class UsersController {
-  constructor() {
-    this.users = [
-      {
-        login: "one",
-        name: "111",
-        password: "supersecret",
-      },
-      {
-        login: "second",
-        name: "222",
-        password: "supersecret",
-      },
-      {
-        login: "third",
-        name: "333",
-        password: "supersecret",
-      },
-    ]
-  }
+  constructor() {}
   async allUsers(req, res) {
-    let users = []
-    for (let i of this.users) {
-      users.push(i.name)
-    }
-    res.send({ status: "ok", data: users })
+    User.find({}, function (err, allUsers) {
+      if (err) {
+        console.log(err)
+        return res.sendStatus(400)
+      }
+      res.send(allUsers)
+    })
   }
   async getUserInfo(req, res) {
-    for (let i of this.users) {
-      if (i.login == req.body.login) {
-        return i
-      }
-    }
+    User.findOne({}, { projection: { name: req.session.user.name }, function (err, user) {
+      return user
+    })
   }
 }
 module.exports = UsersController

@@ -16,6 +16,8 @@ class Blog {
     if (req.body.password != user.password) {
       res.send({ status: "error", message: "Wrong password." })
     } else {
+      req.session.isAuthenticated = true
+      req.session.user = user
       res.send({ status: "ok", data: { name: user.name } })
     }
   }

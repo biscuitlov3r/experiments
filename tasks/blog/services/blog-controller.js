@@ -1,25 +1,8 @@
+const User = require("../models/user")
+const Blog = require("../models/blog")
+
 class BlogController {
   constructor() {
-    this.blogs = [
-      {
-        title: "Все блоги",
-        text: "Тут будут выводиться все блоги",
-        date: "1.2.2022",
-        name: "111",
-      },
-      {
-        title: "Все блоги2",
-        text: "Тут будут выводиться все блоги2",
-        date: "1.2.2023",
-        name: "222",
-      },
-      {
-        title: "Все блоги3",
-        text: "Тут будут выводиться все блоги3",
-        date: "1.2.2024",
-        name: "333",
-      },
-    ]
     this.notes = [
       {
         title: "Все блоги",
@@ -36,22 +19,63 @@ class BlogController {
     ]
   }
   async allBlogs(req, res) {
-    res.render("index.njk", {
-      namepage: "Blog",
-      title: "Все блоги",
-      description: "Тут будут выводиться все блоги",
-      blogs: this.blogs,
-    })
+    Blog.find({}, function (err, allBlogs) {
+      res.render("index.njk", {
+        namepage: "Blog",
+        title: "Все блоги",
+        description: "Тут будут выводиться все блоги",
+        blogs: allBlogs
+      })
+    }
   }
 
   async getBlog(req, res) {
-    let notes = []
-    for (let i in this.notes) {
-      if (req.params.id == this.notes[i].name) {
-        notes.push(this.notes[i])
+    Note.find({}, { projection: { name: req.params.id }, function (err, allNotes) {
+      if (err) {
+        console.log(err)
+        return res.sendStatus(400)
       }
-    }
-    res.render("blog.njk", { notes: notes })
+      let notes = []
+      for (let i in allNotes) {
+        if (req.params.id == allNotes[i].name) {
+          notes.push(allNotes[i])
+        }
+      }
+      res.render("blog.njk", { notes: notes })
+    })
+  }
+  async getMyBlog(req, res) {
+    Note.find({}, { projection: { name: req.session.user.name }, function (err, allNotes) {
+      if (err) {
+        console.log(err)
+        return res.sendStatus(400)
+      }
+      let notes = []
+      for (let i in allNotes) {
+        if (req.params.id == allNotes[i].name) {
+          notes.push(allNotes[i])
+        }
+      }
+      res.render("myblog.njk", { notes: notes })
+    })
+  }
+  async addPost(title, text, date, name) {
+    let note = new Note({ title: title, text: text, date: date, name: name })
+    note.save(function (err) {
+      if (err) {
+        console.log(err)
+      }
+      return
+    })
+  }
+  async addTestUser(req, res) {
+    let user = new User({ name: "Vasya", login: "vAsYa", password: "123" })
+    user.save(function (err) {
+      if (err) {
+        console.log(err)
+      }
+      res.send("test user successfully added")
+    })
   }
 }
 module.exports = BlogController
